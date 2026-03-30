@@ -4,7 +4,9 @@ import axios from 'axios';
 import { Send, Moon, Sun, User, LogOut } from 'lucide-react';
 import './App.css';
 
-const socket = io('http://localhost:5000');
+// Use environment variable for backend URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+const socket = io(BACKEND_URL);
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -42,11 +44,11 @@ function App() {
   const handleAuth = async (isLogin) => {
     try {
       const endpoint = isLogin ? 'login' : 'register';
-      const res = await axios.post(`http://localhost:5000/api/auth/${endpoint}`, { username, password });
+      const res = await axios.post(`${BACKEND_URL}/api/auth/${endpoint}`, { username, password });
       setUser(res.data.user);
       setError('');
       // Fetch initial messages
-      const msgs = await axios.get('http://localhost:5000/api/messages');
+      const msgs = await axios.get(`${BACKEND_URL}/api/messages`);
       setMessages(msgs.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Authentication failed');
@@ -120,15 +122,15 @@ function App() {
 
       <div className="messages-container">
         {messages.map((msg) => (
-           <div key={msg.id} className={`message-wrapper ${msg.sender === user.username ? 'sent' : 'received'}`}>
-             {msg.sender !== user.username && <div className="sender-name">{msg.sender}</div>}
-             <div className="message-bubble">
-               {msg.text}
-             </div>
-             <div className="timestamp">
-               {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-             </div>
-           </div>
+          <div key={msg.id} className={`message-wrapper ${msg.sender === user.username ? 'sent' : 'received'}`}>
+            {msg.sender !== user.username && <div className="sender-name">{msg.sender}</div>}
+            <div className="message-bubble">
+              {msg.text}
+            </div>
+            <div className="timestamp">
+              {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            </div>
+          </div>
         ))}
         <div ref={messagesEndRef} />
       </div>
