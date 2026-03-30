@@ -4,8 +4,8 @@ import axios from 'axios';
 import { Send, Moon, Sun, User, LogOut } from 'lucide-react';
 import './App.css';
 
-// Use environment variable for backend URL
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+// Use environment variable for backend URL, fallback to Render deployment
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'https://chatapp-lein.onrender.com';
 const socket = io(BACKEND_URL);
 
 function App() {
