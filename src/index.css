@@ -1,0 +1,7 @@
+/* Reset and empty index to avoid default Vite centering */
+body {
+  margin: 0;
+  display: block;
+  min-width: unset;
+  min-height: unset;
+}
